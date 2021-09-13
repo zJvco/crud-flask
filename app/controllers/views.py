@@ -57,7 +57,7 @@ def users():
     return render_template("users.html", users=users, form=form)
 
 
-@bp.route("/users/remove", methods=["GET", "POST"])
+@bp.route("/users/remove", methods=["POST"])
 def remove_user():
     req = request.get_json()
     user = User.query.filter_by(id=req["user"])
