@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Users
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Address</th>
+            <th scope="col">Created</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Edit | Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <div class="modal fade" id="exampleModal-{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit user {{ user.name }}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST">
+                            {{ form.hidden_tag() }}
+
+                            <div class="input-field">
+                                <div class="field">
+                                    {{ form.name.label() }}
+                                    {{ form.name() }}
+                                </div>
+                                <div class="field">
+                                    {{ form.email.label() }}
+                                    {{ form.email(value=user.email, readonly=true) }}
+                                </div>
+                                <div class="field">
+                                    {{ form.phone.label() }}
+                                    {{ form.phone(value=user.phone, readonly=true) }}
+                                </div>
+                            </div>
+                    
+                            <br>
+                    
+                            <div class="input-field">
+                                <div class="address-part">
+                                    <div class="field">
+                                        {{ form.address_cep.label() }}
+                                        {{ form.address_cep() }}
+                                    </div>
+                                    <div class="field">
+                                        {{ form.address_street.label() }}
+                                        {{ form.address_street() }}
+                                    </div>
+                                </div>
+                                <div class="address-part">
+                                    <div class="field">
+                                        {{ form.address_number.label() }}
+                                        {{ form.address_number() }}
+                                    </div>
+                                    <div class="field">
+                                        {{ form.address_complement.label() }}
+                                        {{ form.address_complement() }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" id="save-changes">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <tr>
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.created_date }}</td>
+            <td>{{ user.updated_date }}</td>
+            <td style="display: flex;">
+                <button style="margin-right: 15px;" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal-{{ user.id }}">Edit</button>
+                <button type="button" id="remove-btn" value="{{ user.id }}" class="btn btn-outline-danger">Remove</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    const remove_btn = document.querySelectorAll("#remove-btn")
+
+    remove_btn.forEach(e => {
+        e.addEventListener("click", () => {
+            const config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({user: e.value})
+            }
+
+            fetch("/users/remove", config)
+                .then(res => window.location.reload())
+                .catch(err => alert(err))
+        })
+    })
+    
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>User Registration</h1>
+    <p>Please, register your user below.</p>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="input-field">
+            <div class="field">
+                {{ form.name.label() }}
+                {{ form.name() }}
+            </div>
+            <div class="field">
+                {{ form.email.label() }}
+                {{ form.email() }}
+            </div>
+            <div class="field">
+                {{ form.phone.label() }}
+                {{ form.phone() }}
+            </div>
+        </div>
+
+        <br>
+
+        <div class="input-field">
+            <div class="address-part">
+                <div class="field">
+                    {{ form.address_cep.label() }}
+                    {{ form.address_cep() }}
+                </div>
+                <div class="field">
+                    {{ form.address_street.label() }}
+                    {{ form.address_street() }}
+                </div>
+            </div>
+            <div class="address-part">
+                <div class="field">
+                    {{ form.address_number.label() }}
+                    {{ form.address_number() }}
+                </div>
+                <div class="field">
+                    {{ form.address_complement.label() }}
+                    {{ form.address_complement() }}
+                </div>
+            </div>
+        </div>
+        <br>
+        
+        <div class="submit-field">
+            {{ form.submit() }}
+        </div>
+    </form>
+</div>
+{% endblock %}
